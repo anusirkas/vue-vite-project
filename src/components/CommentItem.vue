@@ -1,6 +1,6 @@
 <template>
     <div class="comment">
-        <strong>{{ comment.user.name }}</strong>
+        <strong>{{ comment.user }}</strong>
         <p>{{ comment.message }}</p>
         <small>{{ formattedDate }}</small>
     </div>
@@ -10,13 +10,15 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    comment: Object
+    comment: {
+        type: Object,
+        required: true
+    }
 });
 
 const formattedDate = computed(() => {
     return new Date(props.comment.createdAt).toLocaleString();
 });
-
 </script>
 
 <style>

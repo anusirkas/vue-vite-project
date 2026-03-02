@@ -12,6 +12,9 @@
 import CommentItem from './CommentItem.vue';
 
 defineProps({
-    comments: Array
-})
+    comments: {
+        type: Array,
+        required: true
+    }
+});
 </script>

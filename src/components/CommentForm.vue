@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent ="submitComment">
+    <form @submit.prevent ="handleSubmit">
         <select v-model="selectedUser">
             <option disabled value="">Select User</option>
             <option v-for="user in users" :key="user.id" :value="user.name">
@@ -29,7 +29,7 @@ const users = [
     { id: 2, name: 'Jane Smith' }
 ];
 
-function submitComment() { // Function to handle comment submission
+function handleSubmit() { // Function to handle comment submission
     if (!message.value  || !selectedUser.value) return // Prevent submission if message or user is not selected
     emit('add-comment', { // Emit the add-comment event with the new comment data
         id: Date.now(), // Generate a unique ID for the comment
