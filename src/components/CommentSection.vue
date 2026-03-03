@@ -18,18 +18,18 @@ interface Comment {
 }
 const comments = ref<Comment[]>([]);
 
-onMounted(() => { //    Lifecycle hook to run code when the component is mounted
+onMounted(() => { //    Lifecycle hook to run code when the component is mounted. onMounted → loeb localStorage .
     const saved = localStorage.getItem('comments'); //  Retrieve saved comments from localStorage
     if (saved) { // Check if there are saved comments
         comments.value = JSON.parse(saved); // Parse the saved comments and set them to the reactive variable
     }
 });
 
-watch(comments, (newVal) => {
+watch(comments, (newVal) => { //watch → salvestab localStorage. Watch for changes in the comments array and save the new value to localStorage whenever it changes
     localStorage.setItem('comments', JSON.stringify(newVal));
 }, { deep: true });
 
-function addComment(comment: Comment) {
+function addComment(comment: Comment) { //addComment → lisab array’sse
   comments.value.push(comment);
 }
 
