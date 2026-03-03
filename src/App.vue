@@ -16,3 +16,4 @@ import CommentSection from './components/CommentSection.vue';
   font-family: Arial, sans-serif;
 }
 </style>
+/* npm run dev-iga saad käima */

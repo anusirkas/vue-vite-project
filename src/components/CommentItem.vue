@@ -1,7 +1,7 @@
 <template>
     <div class="comment">
         <strong>{{ comment.user }}</strong>
-        <p>{{ comment.message }}</p>
+        <p>{{ comment.text }}</p>
         <small>{{ formattedDate }}</small>
     </div>
 </template>
