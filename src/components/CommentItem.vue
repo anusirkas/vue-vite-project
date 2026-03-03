@@ -1,31 +1,28 @@
 <template>
-    <div class="comment">
-        <strong>{{ comment.user }}</strong>
-        <p>{{ comment.text }}</p>
-        <small>{{ formattedDate }}</small>
+  <div class="comment">
+    <div class="avatar">
+      {{ comment.user.slice(0,2).toUpperCase() }}
     </div>
+
+    <div>
+      <div>{{ comment.text }}</div>
+      <small>{{ formattedDate }}</small>
+    </div>
+  </div>
 </template>
+<script setup lang="ts">
+import { computed } from 'vue'
 
-<script setup>
-import { computed } from 'vue';
+const props = defineProps<{
+  comment: {
+    id: number
+    user: string
+    text: string
+    createdAt: Date
+  }
+}>()
 
-const props = defineProps({
-    comment: {
-        type: Object,
-        required: true
-    }
-});
-
-const formattedDate = computed(() => {
-    return new Date(props.comment.createdAt).toLocaleString();
-});
+const formattedDate = computed(() =>
+  new Date(props.comment.createdAt).toLocaleString()
+)
 </script>
-
-<style>
-.comment {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-}
-</style>

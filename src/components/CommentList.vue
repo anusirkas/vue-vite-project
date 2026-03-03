@@ -17,4 +17,8 @@ defineProps({
         required: true
     }
 });
+
+//defineProps<{
+//  comments: any[]
+//}>()
 </script>

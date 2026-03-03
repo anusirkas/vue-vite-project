@@ -1,44 +1,57 @@
-<template>
-    <form @submit.prevent ="handleSubmit">
-        <select v-model="selectedUser">
-            <option disabled value="">Select User</option>
-            <option v-for="user in users" :key="user.id" :value="user.name">
-                {{ user.name }}
-            </option>
-        </select>
+<script setup lang="ts">
+import { ref } from 'vue'
 
-        <input
-            v-model="message"
-            type="text"
-            placeholder="Write a comment..." required
-        />
-        <button type="submit">Submit</button>
-    </form>
-</template>
-
-<script setup>
-import { ref } from 'vue'; // Importing ref for reactive state management
-
-const emit = defineEmits(['add-comment']); // Define an event emitter for adding comments
-
-const message = ref(''); // Reactive variable to hold the comment message
-const selectedUser = ref(''); // Reactive variable to hold the selected user
+const emit = defineEmits<{
+  (e: 'add-comment', comment: {
+    id: number
+    user: string
+    text: string
+    createdAt: Date
+  }): void
+}>()
 
 const users = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Jane Smith' }
-];
+  { id: 1, name: 'John Doe' },
+  { id: 2, name: 'Jane Smith' }
+]
 
-function handleSubmit() { // Function to handle comment submission
-    if (!message.value  || !selectedUser.value) return // Prevent submission if message or user is not selected
-    emit('add-comment', { // Emit the add-comment event with the new comment data
-        id: Date.now(), // Generate a unique ID for the comment
-        user: selectedUser.value, //    Set the user for the comment
-        text: message.value, // Set the comment message
-        createdAt: new Date()  // Set the creation date for the comment
-    }); // Emit the add-comment event with the new comment data
+const selectedUser = ref('')
+const message = ref('')
 
-    message.value = ''; // Clear the message input after submission
-    selectedUser.value = ''; // Clear the selected user after submission
+function handleSubmit() {
+  if (!selectedUser.value || !message.value) return
+
+  emit('add-comment', {
+    id: Date.now(),
+    user: selectedUser.value,
+    text: message.value,
+    createdAt: new Date()
+  })
+
+  message.value = ''
 }
 </script>
+
+<template>
+  <div class="form-section">
+    <select v-model="selectedUser" class="user-input">
+      <option disabled value="">Select user</option>
+      <option v-for="user in users" :key="user.id" :value="user.name">
+        {{ user.name }}
+      </option>
+    </select>
+
+    <div class="textarea-wrapper">
+      <textarea
+      v-model="message"
+      class="comment-input"
+      placeholder="Write a comment..."
+      ></textarea>
+    </div>
+
+
+    <button class="submit-btn" @click="handleSubmit">
+      Submit
+    </button>
+  </div>
+</template>

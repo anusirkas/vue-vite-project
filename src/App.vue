@@ -14,35 +14,20 @@
       </div>
     </div>
 
-    <div class="comments-card">
+    <div class="comments-card">      
       <h3>Comments</h3>
-
-      <div class="comment">
-        <div class="avatar">JO</div>
-        <div class="comment-text">Ah, always raining!</div>
-      </div>
-
-      <div class="comment">
-        <div class="avatar">JA</div>
-        <div class="comment-text">Waiting for the sunny days</div>
-      </div>
-
-      <div class="comment">
-        <div class="avatar">JO</div>
-        <div class="comment-text">I love rain</div>
-      </div>
-
-      <div class="form-section">
-        <input class="user-input" value="John Doe" readonly />
-        <textarea
-          class="comment-input"
-          placeholder="Write a comment..."
-        ></textarea>
-        <button class="submit-btn">Submit</button>
+      <div>
+        <CommentSection />
       </div>
     </div>
+
   </div>
 </template>
+
+<script setup>
+import CommentSection from './components/CommentSection.vue';
+
+</script>
 
 <style>
 .page {
@@ -99,7 +84,9 @@
   border-radius: 10px;
   display: flex;
   align-items: center;
+  text-align: left; 
   margin-bottom: 10px;
+  color: #333;
 }
 
 .avatar {
@@ -134,10 +121,15 @@
   color: #333;
 }
 
+.textarea-wrapper {
+  position: relative;
+}
+
 .comment-input {
   width: 100%;
-  height: 80px;
+  height: 100px;
   padding: 10px;
+  padding-bottom: 45px;   /* ruum nupu jaoks */
   border-radius: 8px;
   border: 1px solid #ccc;
   resize: none;
@@ -146,14 +138,15 @@
 }
 
 .submit-btn {
-  margin-top: 10px;
-  padding: 8px 16px;
-  border-radius: 8px;
+  position: absolute;
+  left: 60%;
+  margin-top: -60px;
+  padding: 6px 14px;
+  border-radius: 6px;
   border: none;
   background: #aab6e6;
   color: white;
   cursor: pointer;
-  float: right;
 }
 
 .submit-btn:hover {

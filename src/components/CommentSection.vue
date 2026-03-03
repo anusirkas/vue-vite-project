@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <CommentForm @add-comment="addComment" />
+    <div class="comments-card">
         <CommentList :comments="comments" />
+        <CommentForm @add-comment="addComment" />
     </div>
 </template>
 
