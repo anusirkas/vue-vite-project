@@ -23,36 +23,36 @@
           v-for="comment in comments"
           :key="comment.id"
           class="comment"
-        >
+        > <!-- Each comment is wrapped in a div with class 'comment' for styling -->
           <div class="avatar">{{ getInitials(comment.user) }}</div>
 
-          <div class="comment-body">
-            <div class="comment-meta">
-              <strong class="comment-user">{{ comment.user }}</strong>
-              <div class="comment-text">{{ comment.text }}</div>
+          <div class="comment-body"> <!-- This div wraps the username, comment text, and date for better styling -->
+            <div class="comment-meta"> <!-- This div wraps the username and comment text for better styling -->
+              <strong class="comment-user">{{ comment.user }}</strong>  <!-- Display the username in bold -->
+              <div class="comment-text">{{ comment.text }}</div>  <!-- Display the comment text below the username -->
             </div>
-            <small>{{ formatDate(comment.createdAt) }}</small>
+            <small>{{ formatDate(comment.createdAt) }}</small>  <!-- Display the formatted date below the comment text -->
           </div>
         </div>
       </div>
 
       <!-- Form (inlined from CommentForm) -->
-      <form class="form-section" @submit.prevent="handleSubmit">
-        <select v-model="selectedUser" class="user-input">
-          <option disabled value="">Select user</option>
-          <option v-for="user in users" :key="user.id" :value="user.name">
+      <form class="form-section" @submit.prevent="handleSubmit"> <!-- The form submission is handled by the handleSubmit method, and the default form submission behavior is prevented -->
+        <select v-model="selectedUser" class="user-input"> <!-- A dropdown to select the user, bound to the selectedUser reactive variable -->
+          <option disabled value="">Select user</option> <!-- A disabled option prompting the user to select a user -->
+          <option v-for="user in users" :key="user.id" :value="user.name"> <!-- Loop through the users array to create an option for each user, with the user's name as the value -->
             {{ user.name }}
           </option>
         </select>
 
-        <div class="textarea-wrapper">
+        <div class="textarea-wrapper"> <!-- A wrapper div for the textarea and submit button to allow for better styling and positioning -->
           <textarea
             v-model="message"
             class="comment-input"
             placeholder="Write a comment..."
           ></textarea>
 
-          <button class="submit-btn" type="submit">Submit</button>
+          <button class="submit-btn" type="submit">Submit</button> <!-- A button to submit the comment -->
         </div>
       </form>
     </div>
@@ -61,18 +61,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue' // Importing necessary functions from Vue for reactive state management and lifecycle hooks
 
-const users = [
+const users = [ // A hardcoded list of users for the dropdown selection in the comment form
   { id: 1, name: 'John Doe' },
   { id: 2, name: 'Jane Smith' }
 ]
 
-const comments = ref([])
-const selectedUser = ref('')
-const message = ref('')
+const comments = ref([]) // A reactive variable to hold the list of comments
+const selectedUser = ref('') // A reactive variable to hold the currently selected user from the dropdown
+const message = ref('') // A reactive variable to hold the current message input
 
-onMounted(() => {
+onMounted(() => { // Lifecycle hook that runs when the component is mounted
   const saved = localStorage.getItem('comments')
   if (saved) {
     try {
@@ -83,15 +83,15 @@ onMounted(() => {
   }
 })
 
-watch(comments, (newComments) => {
-  localStorage.setItem('comments', JSON.stringify(newComments))
+watch(comments, (newComments) => { // Watcher that runs whenever the comments array changes
+  localStorage.setItem('comments', JSON.stringify(newComments)) // Save the updated comments array to localStorage
 }, { deep: true })
 
-function formatDate(d) {
+function formatDate(d) { // Function to format a date string into a more readable format
   return new Date(d).toLocaleString()
 }
 
-function getInitials(name = '') {
+function getInitials(name = '') { // Function to get the initials of a user's name
   return String(name)
     .split(' ')
     .map(n => n[0] || '')
@@ -100,23 +100,23 @@ function getInitials(name = '') {
     .toUpperCase()
 }
 
-function addComment(comment) {
+function addComment(comment) { // Function to add a new comment to the comments array
   comments.value.push(comment)
 }
 
-function handleSubmit() {
+function handleSubmit() { // Function to handle the form submission for adding a new comment
   if (!selectedUser.value || !message.value) return
 
-  const comment = {
+  const comment = { // Create a new comment object with the selected user, message, and current timestamp
     id: Date.now(),
     user: selectedUser.value,
     text: message.value,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString()   // Store the date as an ISO string for better consistency when saving to localStorage
   }
 
-  addComment(comment)
+  addComment(comment) // Add the new comment to the comments array
 
-  // reset
+  // reset the form fields
   message.value = ''
   selectedUser.value = ''
 }
@@ -167,10 +167,6 @@ function handleSubmit() {
   color: #444;
 }
 
-.comments-card * {
-  box-sizing: border-box;
-}
-
 .comment {
   background: white;
   padding: 12px;
@@ -205,8 +201,6 @@ function handleSubmit() {
 
 .user-input {
   width: 100%;
-  box-sizing: border-box;
-  max-width: 100%;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -221,8 +215,6 @@ function handleSubmit() {
 
 .comment-input {
   width: 100%;
-  box-sizing: border-box;
-  max-width: 100%;
   height: 100px;
   padding: 10px;
   padding-bottom: 56px;   /* space for button */
@@ -231,6 +223,7 @@ function handleSubmit() {
   resize: none;
   background-color: white;
   color: #333;
+  box-sizing: border-box;
 }
 
 .textarea-wrapper .submit-btn {
