@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="comments-card">      
+    <div class="comments-card">
       <h3>Comments</h3>
       <div>
         <CommentSection />
@@ -40,7 +40,6 @@ import CommentSection from './components/CommentSection.vue';
   background: linear-gradient(135deg, #5f77d8, #4e67c6);
   padding: 20px;
   border-radius: 12px;
-  color: white;
 }
 
 .weather-card h2 {
@@ -58,7 +57,7 @@ import CommentSection from './components/CommentSection.vue';
   align-items: center;
 }
 
-.weather.item {
+.weather-item {
   display: flex;
 }
 .date {
