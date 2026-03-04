@@ -18,6 +18,10 @@ const users = [
 const selectedUser = ref('')
 const message = ref('')
 
+//handleSubmit:
+//  lisa uus comment array’sse
+//   salvesta array localStorage’i
+
 function handleSubmit() {
   if (!selectedUser.value || !message.value) return
 
@@ -33,7 +37,7 @@ function handleSubmit() {
 </script>
 
 <template>
-  <div class="form-section">
+  <form class="form-section" @submit.prevent="handleSubmit">
     <select v-model="selectedUser" class="user-input">
       <option disabled value="">Select user</option>
       <option v-for="user in users" :key="user.id" :value="user.name">
@@ -43,15 +47,31 @@ function handleSubmit() {
 
     <div class="textarea-wrapper">
       <textarea
-      v-model="message"
-      class="comment-input"
-      placeholder="Write a comment..."
+        v-model="message"
+        class="comment-input"
+        placeholder="Write a comment..."
       ></textarea>
+
+      <button class="submit-btn" type="submit">
+        Submit
+      </button>
     </div>
-
-
-    <button class="submit-btn" @click="handleSubmit">
-      Submit
-    </button>
-  </div>
+  </form>
 </template>
+
+<style scoped>
+ .textarea-wrapper { position: relative; }
+ .comment-input { padding-bottom: 56px; }
+ .textarea-wrapper .submit-btn {
+   position: absolute;
+   right: 10px;
+   bottom: 10px;
+   padding: 8px 12px;
+   border-radius: 6px;
+   border: none;
+   background: #aab6e6;
+   color: white;
+   cursor: pointer;
+ }
+ .textarea-wrapper .submit-btn:hover { background: #8f9fdd; }
+</style>
