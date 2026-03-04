@@ -16,17 +16,110 @@
 
     <div class="comments-card">
       <h3>Comments</h3>
+
+      <!-- Comments list (inlined from CommentList + CommentItem) -->
       <div>
-        <CommentSection />
+        <div
+          v-for="comment in comments"
+          :key="comment.id"
+          class="comment"
+        >
+          <div class="avatar">{{ getInitials(comment.user) }}</div>
+
+          <div class="comment-body">
+            <div class="comment-meta">
+              <strong class="comment-user">{{ comment.user }}</strong>
+              <div class="comment-text">{{ comment.text }}</div>
+            </div>
+            <small>{{ formatDate(comment.createdAt) }}</small>
+          </div>
+        </div>
       </div>
+
+      <!-- Form (inlined from CommentForm) -->
+      <form class="form-section" @submit.prevent="handleSubmit">
+        <select v-model="selectedUser" class="user-input">
+          <option disabled value="">Select user</option>
+          <option v-for="user in users" :key="user.id" :value="user.name">
+            {{ user.name }}
+          </option>
+        </select>
+
+        <div class="textarea-wrapper">
+          <textarea
+            v-model="message"
+            class="comment-input"
+            placeholder="Write a comment..."
+          ></textarea>
+
+          <button class="submit-btn" type="submit">Submit</button>
+        </div>
+      </form>
     </div>
 
   </div>
 </template>
 
 <script setup>
-import CommentSection from './components/CommentSection.vue';
+import { ref, onMounted, watch } from 'vue'
 
+const users = [
+  { id: 1, name: 'John Doe' },
+  { id: 2, name: 'Jane Smith' }
+]
+
+const comments = ref([])
+const selectedUser = ref('')
+const message = ref('')
+
+onMounted(() => {
+  const saved = localStorage.getItem('comments')
+  if (saved) {
+    try {
+      comments.value = JSON.parse(saved)
+    } catch (e) {
+      comments.value = []
+    }
+  }
+})
+
+watch(comments, (newComments) => {
+  localStorage.setItem('comments', JSON.stringify(newComments))
+}, { deep: true })
+
+function formatDate(d) {
+  return new Date(d).toLocaleString()
+}
+
+function getInitials(name = '') {
+  return String(name)
+    .split(' ')
+    .map(n => n[0] || '')
+    .join('')
+    .slice(0,2)
+    .toUpperCase()
+}
+
+function addComment(comment) {
+  comments.value.push(comment)
+}
+
+function handleSubmit() {
+  if (!selectedUser.value || !message.value) return
+
+  const comment = {
+    id: Date.now(),
+    user: selectedUser.value,
+    text: message.value,
+    createdAt: new Date().toISOString()
+  }
+
+  addComment(comment)
+
+  // reset
+  message.value = ''
+  selectedUser.value = ''
+}
 </script>
 
 <style>
@@ -57,9 +150,6 @@ import CommentSection from './components/CommentSection.vue';
   align-items: center;
 }
 
-.weather-item {
-  display: flex;
-}
 .date {
   color: #3b5ed7;
   font-weight: 600;
@@ -107,7 +197,6 @@ import CommentSection from './components/CommentSection.vue';
 
 .form-section {
   margin-top: 20px;
-  text-decoration: #000000;
 }
 
 .user-input {
@@ -128,7 +217,7 @@ import CommentSection from './components/CommentSection.vue';
   width: 100%;
   height: 100px;
   padding: 10px;
-  padding-bottom: 45px;   /* ruum nupu jaoks */
+  padding-bottom: 56px;   /* space for button */
   border-radius: 8px;
   border: 1px solid #ccc;
   resize: none;
@@ -136,19 +225,17 @@ import CommentSection from './components/CommentSection.vue';
   color: #333;
 }
 
-.submit-btn {
+.textarea-wrapper .submit-btn {
   position: absolute;
-  left: 60%;
-  margin-top: -60px;
-  padding: 6px 14px;
+  right: 10px;
+  bottom: 10px;
+  padding: 8px 12px;
   border-radius: 6px;
   border: none;
   background: #aab6e6;
   color: white;
   cursor: pointer;
 }
+.textarea-wrapper .submit-btn:hover { background: #8f9fdd; }
 
-.submit-btn:hover {
-  background: #8f9fdd;
-}
 </style>
