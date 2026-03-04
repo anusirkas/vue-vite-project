@@ -167,6 +167,10 @@ function handleSubmit() {
   color: #444;
 }
 
+.comments-card * {
+  box-sizing: border-box;
+}
+
 .comment {
   background: white;
   padding: 12px;
@@ -201,6 +205,8 @@ function handleSubmit() {
 
 .user-input {
   width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -215,6 +221,8 @@ function handleSubmit() {
 
 .comment-input {
   width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
   height: 100px;
   padding: 10px;
   padding-bottom: 56px;   /* space for button */
