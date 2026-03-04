@@ -1,176 +1,154 @@
 <template>
-  <main class="app">
-    <section class="comment-section">
-      <form class="comment-form" @submit.prevent="addComment">
-        <label>
-          User
-          <select v-model="newUser" class="user-input">
-            <option value="">Select user</option>
-            <option
-              v-for="user in users"
-              :key="user"
-              :value="user"
-            >
-              {{ user }}
-            </option>
-          </select>
-        </label>
+  <div class="page">
+    <div class="weather-card">
+      <h2>Weather forecast for Tallinn</h2>
 
-        <label>
-          Comment
-          <textarea v-model="newText" class="comment-input" rows="3" placeholder="Write a comment"></textarea>
-        </label>
+      <div class="weather-item">
+        <span class="date">03 January 2026</span>
+        <span class="weather-text">🌧 Rain.</span>
+      </div>
 
-        <button type="submit" class="submit-btn">
-          Add comment
-        </button>
-      </form>
+      <div class="weather-item">
+        <span class="date">04 January 2026</span>
+        <span class="weather-text">🌧 Periods of rain.</span>
+      </div>
+    </div>
 
-      <ul class="comment-list">
-        <li v-for="c in comments" :key="c.id" class="comment-item">
-          <div class="comment-header">
-            <div class="avatar">
-              {{ getInitials(c.user) }}
-            </div>
+    <div class="comments-card">
+      <h3>Comments</h3>
+      <div>
+        <CommentSection />
+      </div>
+    </div>
 
-            <div class="comment-meta">
-              <strong class="comment-user">{{ c.user }}</strong>
-              <span class="comment-date">
-                {{ formatDate(c.created_at) }}
-              </span>
-            </div>
-          </div>
-          <p class="comment-body">{{ c.text }}</p>
-        </li>
-      </ul>
-    </section>
-  </main>
+  </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue' // Importing the ref function from Vue to create reactive state variables
-
-const comments = ref([]) // Reactive variable to hold the list of comments
-
-const users = [
-  'John Doe',
-  'Jane Smith'
-] // Array of users to populate the dropdown
-
-const newUser = ref('') // Reactive variable to hold the selected user from the dropdown
-const newText = ref('') // Reactive variable to hold the text input for the new comment
-
-function formatDate(dateString) {
-  const date = new Date(dateString)
-  return date.toLocaleString()
-}
-
-function getInitials(name) {
-  return name.split(' ').map(n => n[0]).join('')
-}
-
-onMounted(() => {
-  const savedComments = localStorage.getItem('comments')
-  if (savedComments) {
-    comments.value = JSON.parse(savedComments)
-  }
-})
-
-watch(comments, (newComments) => {
-  localStorage.setItem('comments', JSON.stringify(newComments))
-}, { deep: true })
-
-function addComment() {
-  const text = newText.value && newText.value.trim()
-  if (!newUser.value || !text) return
-
-  comments.value.unshift({ // Adding a new comment to the beginning of the comments array. .push would add it to the end.
-    id: Date.now(),
-    user: newUser.value,
-    text,
-    created_at: new Date().toISOString()
-  })
-
-  newUser.value = ''
-  newText.value = ''
-  console.log('Comment added:', comments.value)
-}
+import CommentSection from './components/CommentSection.vue';
 
 </script>
 
-<style scoped>
-.app {
-  padding: 1rem;
-  font-family: system-ui,
-  Arial, sans-serif;
-  background: linear-gradient(135deg, rgb(61, 61, 160), rgb(110, 80, 133));
-  color: white;
+<style>
+.page {
   max-width: 600px;
-  margin: 0 auto;
-
+  margin: 40px auto;
+  font-family: Arial, sans-serif;
 }
-.comment-form {
+
+.weather-card {
+  background: linear-gradient(135deg, #5f77d8, #4e67c6);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.weather-card h2 {
+  margin-bottom: 20px;
+}
+
+.weather-item {
+  background: #ffffff;
+  color: #333;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 12px;
   display: flex;
-  flex-direction: column;
-  gap: .5rem;
-  max-width: 40rem;
+  gap: 1rem;
+  align-items: center;
 }
 
-.user-input, .comment-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
-  color: rgb(2, 35, 35);
-  background-color: bisque;
+.weather-item {
+  display: flex;
+}
+.date {
+  color: #3b5ed7;
+  font-weight: 600;
 }
 
-.submit-btn {
-  align-self:auto;
-  background-color: rgb(2, 35, 35);
-  color: white;
-  border: none;
-  padding: .5rem 1rem;
+.comments-card {
+  background: #f3f4f7;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
 }
 
-.comment-list {
-  margin-top: 1rem;
-  list-style: none;
-  padding: 0;
+.comments-card h3 {
+  margin-bottom: 15px;
+  color: #444;
 }
 
-.comment-item {
-  padding: .5rem;
-  border-bottom: 1px solid #eee;
-}
-
-.comment-user {
-  margin-right: .5rem;
-}
-.comment-header {
+.comment {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: .5rem;
+  text-align: left;
+  margin-bottom: 10px;
+  color: #333;
 }
+
 .avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: rgb(2, 35, 35);
+  width: 36px;
+  height: 36px;
+  background: #5f77d8;
   color: white;
+  font-weight: bold;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: .8rem;
+  margin-right: 10px;
 }
 
-.comment-meta {
-  display: flex;
-  flex-direction: column;
+.comment-text {
+  color: #000000;
 }
 
-.comment-date {
-  font-size: 0.8rem;
-  opacity: 0.7;
+.form-section {
+  margin-top: 20px;
+  text-decoration: #000000;
 }
 
+.user-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  background-color: white;
+  color: #333;
+}
+
+.textarea-wrapper {
+  position: relative;
+}
+
+.comment-input {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  padding-bottom: 45px;   /* ruum nupu jaoks */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  background-color: white;
+  color: #333;
+}
+
+.submit-btn {
+  position: absolute;
+  left: 60%;
+  margin-top: -60px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #aab6e6;
+  color: white;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #8f9fdd;
+}
 </style>
