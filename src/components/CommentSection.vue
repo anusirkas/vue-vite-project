@@ -16,21 +16,21 @@ interface Comment {
   text: string
   createdAt: Date
 }
+
 const comments = ref<Comment[]>([]);
 
-onMounted(() => { //    Lifecycle hook to run code when the component is mounted. onMounted → loeb localStorage .
-    const saved = localStorage.getItem('comments'); //  Retrieve saved comments from localStorage
-    if (saved) { // Check if there are saved comments
-        comments.value = JSON.parse(saved); // Parse the saved comments and set them to the reactive variable
-    }
+onMounted(() => {
+  const savedComments = localStorage.getItem('comments');
+  if (savedComments) {
+    comments.value = JSON.parse(savedComments);
+  }
 });
 
-watch(comments, (newVal) => { //watch → salvestab localStorage. Watch for changes in the comments array and save the new value to localStorage whenever it changes
-    localStorage.setItem('comments', JSON.stringify(newVal));
+watch(comments, (newComments) => {
+  localStorage.setItem('comments', JSON.stringify(newComments));
 }, { deep: true });
 
-function addComment(comment: Comment) { //addComment → lisab array’sse
+function addComment(comment: Comment) {
   comments.value.push(comment);
 }
-
 </script>
