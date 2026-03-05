@@ -17,8 +17,7 @@
     <div class="comments-card">
       <h3>Comments</h3>
 
-      <!-- Comments list (inlined from CommentList + CommentItem) -->
-      <div>
+        <!-- Comments list (inlined from CommentList + CommentItem) -->
         <div
           v-for="comment in comments"
           :key="comment.id"
@@ -34,9 +33,9 @@
             <small>{{ formatDate(comment.createdAt) }}</small>  <!-- Display the formatted date below the comment text -->
           </div>
         </div>
-      </div>
-
-      <!-- Form (inlined from CommentForm) -->
+    </div>
+    <div>
+            <!-- Form (inlined from CommentForm) -->
       <form class="form-section" @submit.prevent="handleSubmit"> <!-- The form submission is handled by the handleSubmit method, and the default form submission behavior is prevented -->
         <select v-model="selectedUser" class="user-input"> <!-- A dropdown to select the user, bound to the selectedUser reactive variable -->
           <option disabled value="">Select user</option> <!-- A disabled option prompting the user to select a user -->
@@ -56,7 +55,6 @@
         </div>
       </form>
     </div>
-
   </div>
 </template>
 
@@ -101,8 +99,10 @@ function getInitials(name = '') { // Function to get the initials of a user's na
 }
 
 function addComment(comment) { // Function to add a new comment to the comments array
-  comments.value.push(comment)
+  comments.value.push(comment) //comments.value.unshift(comment) // Add the new comment to the end of the array (use unshift to add to the beginning)
 }
+
+
 
 function handleSubmit() { // Function to handle the form submission for adding a new comment
   if (!selectedUser.value || !message.value) return
@@ -163,8 +163,9 @@ function handleSubmit() { // Function to handle the form submission for adding a
 }
 
 .comments-card h3 {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   color: #444;
+  text-align: left;
 }
 
 .comment {
@@ -189,10 +190,6 @@ function handleSubmit() { // Function to handle the form submission for adding a
   align-items: center;
   justify-content: center;
   margin-right: 10px;
-}
-
-.comment-text {
-  color: #000000;
 }
 
 .form-section {
@@ -238,5 +235,4 @@ function handleSubmit() { // Function to handle the form submission for adding a
   cursor: pointer;
 }
 .textarea-wrapper .submit-btn:hover { background: #8f9fdd; }
-
 </style>
