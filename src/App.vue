@@ -68,44 +68,49 @@
 import { ref, onMounted, watch } from 'vue';
 
 const users = [
-  { id: 1, name: "John Doe" },
-  { id: 2, name: "Jane Smith" },
-]
+  { id: 1, name: 'John Doe' },
+  { id: 2, name: 'Jane Smith' }
+];
+
 const comments = ref([]);
+const message = ref('');
 const selectedUser = ref('');
-const message =  ref('');
 
 function getInitials(name = '') {
   return name
     .split(' ')
-    .map(n => n[0])
+    .map(part => part[0])
     .join('')
-    .toUpperCase()
-}
+    .toUpperCase();
+};
 
-onMounted (() => {
-  const saved = localStorage.getItem('comments');
-  if (saved) {
+onMounted(() => {
+  const storedComments = localStorage.getItem('comments');
+  if (storedComments) {
     try {
-      comments.value = JSON.parse(saved);
+      comments.value = JSON.parse(storedComments);
     } catch (e) {
-      comments.value = []
+      console.error('Failed to parse comments from localStorage:', e);
     }
   }
 });
 
 watch(comments, (newComments) => {
   localStorage.setItem('comments', JSON.stringify(newComments));
-}, { deep: true })
+}, { deep: true });
 
 function handleSubmit() {
-  if (!selectedUser.value || !message.value) return
-    const comment = {
+  if (message.value.trim() === '' || selectedUser.value === '') {
+    return;
+  }
+
+  const newComment = {
     id: Date.now(),
     user: selectedUser.value,
-    text: message.value,
-  }
-  comments.value.push(comment);
+    text: message.value
+  };
+
+  comments.value.push(newComment);
   message.value = '';
   selectedUser.value = '';
 }
