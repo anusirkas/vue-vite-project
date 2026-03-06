@@ -17,9 +17,15 @@
       <div class="comments-card"><h3>Comments</h3>
         <div class="comments-list">
           <div v-for="comment in comments" :key="comment.id" class="comment-item">
-            <div class="avatar">{{ getInitials(comment.user) }}</div>
-            <strong>{{ comment.user }}</strong> <span class="date">{{ comment.date }}</span>
-            <div class ="comment-text">{{ comment.text }}</div>
+            <div class="avatar">
+              {{ getInitials(comment.user) }}
+            </div>
+
+            <div class="comment-content">
+              <div class="comment-text">
+                {{ comment.text }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -56,9 +62,11 @@ const selectedUser = ref('');
 const message =  ref('');
 
 function getInitials(name = '') {
-  const names = name.split(' ');
-  const initials = names.map(n => n[0]).join('');
-  return initials.toUpperCase();
+  return name
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
 }
 
 onMounted (() => {
